@@ -109,10 +109,3 @@ int main()
     printf("Result: %lld\n", result_of_expresssion);
     return 0;
 }
-
-// edge cases like
-// a) 1++2,++5,1*/4
-// b) "" no expression
-// c) division by zero
-// d) large input (long long int)
-// e) 1_a
