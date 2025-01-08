@@ -13,16 +13,16 @@ int check_space(char name[]){
 }
 int main(){
     int size_of_row,size_of_col;
-    printf("Enter size of row (1<=row<=10): ");
-    scanf("%d",&size_of_row);
-    if(size_of_row<1 || size_of_row>10){
-        printf("Error: Row size should be in range from 1 to 10!");
+    printf("\nEnter size of row (1<=row<=10): ");
+    if(scanf("%d", &size_of_row) != 1 || size_of_row < 1 || size_of_row > 10){
+        printf("Error: Row size should be an integer in the range from 1 to 10!\n");
+        getchar();
         return 0;
     }
     printf("Enter size of column (1<=column<=101): ");
-    scanf("%d",&size_of_col);
-    if(size_of_col<1 || size_of_col>101){
-        printf("Error: Column size should be in range from 1 to 101!");
+    if(scanf("%d", &size_of_col) != 1 || size_of_col < 1 || size_of_col > 101){
+        printf("Error: column size should be an integer in the range from 1 to 101!\n");
+        getchar();
         return 0;
     }
     char ***names_matrix=(char ***)malloc(size_of_row*sizeof(char**));
