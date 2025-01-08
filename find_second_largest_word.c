@@ -46,7 +46,7 @@ void finding_second_largest_word(char *input_sentence,char* result){
     if(second_max_len>0)
         copy_word(result,second_largest_word);
     else
-        result[0]='\0';
+        copy_word(result,first_largest_word);
 }
 int main()
 {
@@ -55,11 +55,21 @@ int main()
     printf("\nInput a sentence: ");
     fgets(input_sentence,sizeof(input_sentence),stdin);
     input_sentence[strcspn(input_sentence,"\n")]='\0';
+    int check_all_space=0;
+    int i=0;
+    while(input_sentence[i]!='\0'){
+        if(input_sentence[i]!=' '){
+            check_all_space=1;
+            break;
+        }
+        i++;
+    }
+    if(input_sentence[0]=='\0' || check_all_space==0){
+        printf("Error: please enter something!");
+        return 0;
+    }
     printf("Sentence is : %s\n",input_sentence);
     finding_second_largest_word(input_sentence,second_largest_word);
-    if(second_largest_word[0]!='\0')
-        printf("Second Largest word is: %s",second_largest_word);
-    else
-        printf("Second largest word not found.");
+    printf("Second Largest word is: %s",second_largest_word);
     return 0;
 }
