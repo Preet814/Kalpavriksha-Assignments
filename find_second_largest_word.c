@@ -17,6 +17,7 @@ void finding_second_largest_word(char *input_sentence,char* result){
     char second_largest_word[100]="";
     int sentence_iterator=0;
     int word_iterator=0;
+    int word_cnt=1;
     while(1){
         if(input_sentence[sentence_iterator]==' ' || input_sentence[sentence_iterator]=='\0'){
             if(curr_len>0){
@@ -36,6 +37,7 @@ void finding_second_largest_word(char *input_sentence,char* result){
             word_iterator=0;
             if(input_sentence[sentence_iterator]=='\0')
                 break;
+            word_cnt++;
         }
         else{
             word[word_iterator++]=input_sentence[sentence_iterator];
@@ -43,10 +45,16 @@ void finding_second_largest_word(char *input_sentence,char* result){
         }
         sentence_iterator++;
     }
-    if(second_max_len>0)
-        copy_word(result,second_largest_word);
-    else
-        copy_word(result,first_largest_word);
+    if(word_cnt==1){
+        result[0]='\0';
+    }
+    else{
+        if(second_max_len>0)
+            copy_word(result,second_largest_word);
+        else
+            copy_word(result,first_largest_word);
+    }
+    
 }
 int main()
 {
@@ -70,6 +78,9 @@ int main()
     }
     printf("Sentence is : %s\n",input_sentence);
     finding_second_largest_word(input_sentence,second_largest_word);
-    printf("Second Largest word is: %s",second_largest_word);
+    if(second_largest_word[0]=='\0')
+        printf("No second largest word.");
+    else
+        printf("Second Largest word is: %s",second_largest_word);
     return 0;
 }
