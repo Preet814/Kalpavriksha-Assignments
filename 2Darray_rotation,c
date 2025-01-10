@@ -1,0 +1,249 @@
+#include <stdio.h>
+#include<stdlib.h>
+#include<string.h>
+void print_matrix(char ***matrix,int row,int col){
+    for(int i=0;i<row;i++){
+        for(int j=0;j<col;j++){
+            printf("%s ",matrix[i][j]);
+        }
+        printf("\n");
+    }
+}
+void transpose_matrix(char ***matrix,int row,int col){
+    for(int i=0;i<row;i++){
+        for(int j=i+1;j<col;j++){
+            char *temp=matrix[i][j];
+            matrix[i][j]=matrix[j][i];
+            matrix[j][i]=temp;
+        }
+    }
+}
+void reverse_row(char **matrix,int i,int j){
+    while(i<=j){
+        char *temp=matrix[i];
+        matrix[i]=matrix[j];
+        matrix[j]=temp;
+        i++;
+        j--;
+    }
+}
+void matrix_level_rotation(char ***matrix,int row,int col,int rotation_count){
+    rotation_count=rotation_count%(col+1);
+    while(rotation_count--){
+        printf("1\n");
+        transpose_matrix(matrix,row,col);
+        for(int i=0;i<row;i++){
+            reverse_row(matrix[i],0,col-1);
+        }
+    }
+}
+void row_wise_rotation_left(char ***matrix,int row,int col,int rotation_count){
+    rotation_count=rotation_count%(col);
+    if(rotation_count==0)
+        return;
+    for(int i=0;i<row;i++){
+        reverse_row(matrix[i],0,rotation_count-1);
+        reverse_row(matrix[i],rotation_count,col-1);
+        reverse_row(matrix[i],0,col-1);
+    }
+}
+void row_wise_rotation_right(char ***matrix,int row,int col,int rotation_count){
+    rotation_count=rotation_count%(col);
+    if(rotation_count==0)
+        return;
+    for(int i=0;i<row;i++){
+        reverse_row(matrix[i],0,col-1);
+        reverse_row(matrix[i],0,rotation_count-1);
+        reverse_row(matrix[i],rotation_count,col-1);
+    }
+}
+void column_wise_rotation_up(char ***matrix,int row,int col,int rotation_count){
+    rotation_count=rotation_count%(row);
+    if(rotation_count==0)
+        return;
+    transpose_matrix(matrix,row,col);
+    row_wise_rotation_left(matrix,row,col,rotation_count);
+    transpose_matrix(matrix,row,col);
+}
+void column_wise_rotation_down(char ***matrix,int row,int col,int rotation_count){
+    rotation_count=rotation_count%(row);
+    if(rotation_count==0)
+        return;
+    transpose_matrix(matrix,row,col);
+    row_wise_rotation_right(matrix,row,col,rotation_count);
+    transpose_matrix(matrix,row,col);
+}
+
+int check_space(char input[]){
+    int i=0;
+    while(input[i]!='\0'){
+        if(input[i]==' ')
+            return 1;
+        i++;
+    }
+    return 0;
+}
+int check_length(char input[]){
+    int size=0;
+    for(int i=0;input[i]!='\0';i++){
+        size++;
+    }
+    if(size>15 || size==0)
+        return 1;
+    else
+        return 0;
+}
+int check_option(int option){
+    if(option<1 || option>5)
+        return 1;
+    else
+        return 0;
+}
+int main(){
+    int row,col;
+    char ch1,ch2;
+    
+    while(1){
+        printf("Enter row for matrix: ");
+        if(scanf("%d%c",&row,&ch1)==2 && ch1=='\n')
+            break;
+        else
+            printf("Error: Enter size of row in integer only!\n");
+        while(getchar()!='\n');
+    }
+    while(1){
+        printf("Enter column for matrix: ");
+        if(scanf("%d%c",&col,&ch2)==2 && ch2=='\n')
+            break;
+        else
+            printf("Error: Enter size of column in integer only!\n");
+        while(getchar()!='\n');
+    }
+    char ***matrix=(char ***)malloc(row*sizeof(char **));
+    for(int i=0;i<row;i++){
+        matrix[i]=(char **)malloc(col*sizeof(char*));
+        for(int j=0;j<col;j++){
+            matrix[i][j]=(char *)malloc(15*sizeof(char));
+        }
+    }
+    printf("\n");
+    for(int i=0;i<row;i++){
+        for(int j=0;j<col;j++){
+            while(1){
+                printf("Enter input[of max 15 charater] at(%d,%d): ",i,j);
+                scanf("%[^\n]s",matrix[i][j]);
+                if(check_space(matrix[i][j])==1)
+                    printf("Error: Do not add spaces while inputting in matrix!\n");
+                else if(check_length(matrix[i][j])==1)
+                    printf("Error: Length of input can't be 0 or more than 15 character!\n");
+                else {
+                    getchar();
+                    break;
+                }
+                while(getchar()!='\n');
+            }
+        }
+    }
+    printf("\n");
+    printf("Input matrix:\n");
+    print_matrix(matrix,row,col);
+    
+    do{
+        int option;
+        char ch;
+        while(1){
+            printf("\n---------------------------------------------options--------------------------------------------------\n\n");
+            printf("1) Matrix Level Rotation: Rotating entire matrix 90 degree clockwise.\n");
+            printf("2) Row-Wise Rotation (Left): Rotate all rows of the matrix to the left by a specified number of steps.\n");
+            printf("3) Row-Wise Rotation (Right): Rotate all rows of the matrix to the right by a specified number of steps.\n");
+            printf("4) Column-Wise Rotation (Up): Rotate all columns of the matrix upwards by a specified number of steps.\n");
+            printf("5) Column-Wise Rotation (Down): Rotate all columns of the matrix downwards by a specified number of steps.\n");
+            printf("6) Exit!\n");
+            printf("Choose any option: ");
+            if(scanf("%d%c",&option,&ch)==2 && ch=='\n' && option>=1 && option<=6)
+                break;
+            else
+                printf("Error: Press enter and Please choose option in range of 1-6!\n");
+            while((ch=getchar())!='\n');
+        }
+        if(option==6){
+            printf("Exiting..\n");
+            break;
+        }
+        switch(option){
+            case 1:{
+                int rotation_count;
+                char ch;
+                while(1){
+                    printf("Enter the number of rotations: ");
+                    if(scanf("%d%c",&rotation_count,&ch)==2 && ch1=='\n')
+                        break;
+                    else
+                        printf("Error: Enter size of row in integer only!\n");
+                    while(getchar()!='\n');
+                }
+                matrix_level_rotation(matrix,row,col,rotation_count);
+                break;
+            }
+            case 2:{
+                int rotation_count;
+                char ch;
+                while(1){
+                    printf("Enter the number of rotations: ");
+                    if(scanf("%d%c",&rotation_count,&ch)==2 && ch1=='\n')
+                        break;
+                    else
+                        printf("Error: Enter size of row in integer only!\n");
+                    while(getchar()!='\n');
+                }
+                row_wise_rotation_left(matrix,row,col,rotation_count);
+                break;
+            }
+            case 3:{
+                int rotation_count;
+                char ch;
+                while(1){
+                    printf("Enter the number of rotations: ");
+                    if(scanf("%d%c",&rotation_count,&ch)==2 && ch1=='\n')
+                        break;
+                    else
+                        printf("Error: Enter size of row in integer only!\n");
+                    while(getchar()!='\n');
+                }
+                row_wise_rotation_right(matrix,row,col,rotation_count);
+                break;
+            }
+            case 4:{
+                int rotation_count;
+                char ch;
+                while(1){
+                    printf("Enter the number of rotations: ");
+                    if(scanf("%d%c",&rotation_count,&ch)==2 && ch1=='\n')
+                        break;
+                    else
+                        printf("Error: Enter size of row in integer only!\n");
+                    while(getchar()!='\n');
+                }
+                column_wise_rotation_up(matrix,row,col,rotation_count);
+                break;
+            }
+            case 5:{
+                int rotation_count;
+                char ch;
+                while(1){
+                    printf("Enter the number of rotations: ");
+                    if(scanf("%d%c",&rotation_count,&ch)==2 && ch1=='\n')
+                        break;
+                    else
+                        printf("Error: Enter size of row in integer only!\n");
+                    while(getchar()!='\n');
+                }
+                column_wise_rotation_down(matrix,row,col,rotation_count);
+                break;
+            }
+        }
+        printf("\nOutput:\n");
+        print_matrix(matrix,row,col);
+    }while(1);
+    return 0;
+}
