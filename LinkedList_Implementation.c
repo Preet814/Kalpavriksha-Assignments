@@ -166,14 +166,14 @@ void display_list(){
     printf("\n");
 }
 int main(){
-    int n;
+    int number_of_operation;
     printf("Input number of operations: ");
-    scanf("%d",&n);
-    if(n<1 || n>100){
+    scanf("%d",&number_of_operation);
+    if(number_of_operation<1 || number_of_operation>100){
         printf("Error: Number of operation must be in range of 1 to 100!");
         return 0;
     }
-    while(n--){
+    while(number_of_operation--){
         int operation_number;
         scanf("%d",&operation_number);
         switch(operation_number){
