@@ -37,6 +37,7 @@ void insertAtPosition(int value,int position){
     newNode->data=value;
     if(position<=0){
         printf("Error: Invalid Position(Position is 1 based indexing)!\n");
+        free(newNode);
         return;
     }
     if(position==1){
@@ -58,6 +59,7 @@ void insertAtPosition(int value,int position){
     }
     if(temp==NULL){
         printf("Error: Invalid Position(Entered position must be in present in the list)!\n");
+        free(newNode);
         return;
     }
     Node* next=temp->next;
@@ -90,6 +92,7 @@ void deleteAtBeginning(){
     Node *temp=head;
     head=temp->next;
     temp->next=NULL;
+    free(temp);
 }
 void deleteAtEnd(){
     if(head==NULL){
@@ -98,6 +101,7 @@ void deleteAtEnd(){
     }
     if(head->next==NULL){
         head=NULL;
+        free(head);
         return;
     }
     Node* temp=head;
@@ -107,6 +111,7 @@ void deleteAtEnd(){
         temp=temp->next;
     }
     prev->next=NULL;
+    free(temp);
 }
 void deleteAtPosition(int position){
     if(head==NULL){
@@ -121,11 +126,13 @@ void deleteAtPosition(int position){
     if(position==1){
         if(head->next==NULL){
             head=NULL;
+            free(head);
         }
         else{
             Node* temp=head;
             head=temp->next;
             temp->next=NULL;
+            free(temp);
         }
         return;
     }
@@ -142,6 +149,7 @@ void deleteAtPosition(int position){
     }
     prev->next=temp->next;
     temp->next=NULL;
+    free(temp);
 }
 void display_list(){
     if(head==NULL){
@@ -154,6 +162,7 @@ void display_list(){
         printf("%d ",temp->data);
         temp=temp->next;
     }
+    free(temp);
     printf("\n");
 }
 int main(){
